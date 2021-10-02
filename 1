@@ -1,0 +1,164 @@
+using System;
+using System.Text;
+using System.Collections.Generic;
+using System.Linq;
+
+
+
+namespace Midterm1
+{
+    enum Menu
+    {
+        PlayGame = 1,
+        Exit
+    }
+
+    class Hangman
+    {
+        public static void playGame()
+        {
+            string[] listwords = { "Tennis", "Football", "Badminton" };
+            Random ranWord = new Random();
+            int ranID = ranWord.Next(0, 2);
+            string secretWord = listwords[ranID];
+            secretWord.All(Char.IsLetter);
+            secretWord = secretWord.ToUpper();
+            int lives = 5;
+            int counter = -1;
+            int wordLength = secretWord.Length;
+            char[] secretArray = secretWord.ToCharArray();
+            char[] printArray = new char[wordLength];
+            char[] guessedLetters = new char[26];
+            int numberStore = 0;
+            bool victory = false;
+
+            foreach (char letter in printArray)
+            {
+                counter++;
+                printArray[counter] = '-';
+            }
+
+            while (lives > 0)
+            {
+                counter = -1;
+                string printProgress = String.Concat(printArray);
+                bool letterFound = false;
+                int multiples = 0;
+
+                if (printProgress == secretWord)
+                {
+                    victory = true;
+                    break;
+                }
+
+                Console.Clear();
+                Console.WriteLine("Play Game Hangman");
+                Console.WriteLine("----------------------------------------");
+
+                Console.WriteLine("Incorrect Score: ");
+                Console.WriteLine(printProgress);
+                Console.Write("\n\n\n");
+
+                Console.Write("Input letter alphabet: ");
+                string playerGuess = Console.ReadLine();
+
+
+
+                //test to make sure a single letter
+                bool guessTest = playerGuess.All(Char.IsLetter);
+
+                while (guessTest == false || playerGuess.Length != 1)
+                {
+                    Console.WriteLine("Please enter only a single letter!");
+                    Console.Write("Guess a letter: ");
+                    playerGuess = Console.ReadLine();
+                    guessTest = playerGuess.All(Char.IsLetter);
+                }
+
+                playerGuess = playerGuess.ToUpper();
+                char playerChar = Convert.ToChar(playerGuess);
+
+                if (guessedLetters.Contains(playerChar) == false)
+                {
+
+                    guessedLetters[numberStore] = playerChar;
+                    numberStore++;
+
+                    foreach (char letter in secretArray)
+                    {
+                        counter++;
+                        if (letter == playerChar)
+                        {
+                            printArray[counter] = playerChar;
+                            letterFound = true;
+                            multiples++;
+                        }
+
+                    }
+
+
+            }
+
+
+            if (victory)
+            {
+                Console.WriteLine("\n\nYou Win");
+            }
+            else
+            {
+                Console.WriteLine("\n\nYou Lose");
+            }
+        
+
+    }
+        }
+        
+
+
+        class Program
+        {
+            static void PrintHeader()
+            {
+                Console.WriteLine("Play Game Hangman");
+                Console.WriteLine("----------------------------------------");
+            }
+            static void PrintList()
+            {
+                Console.WriteLine("1.   Play Hangman");
+                Console.WriteLine("2.   Exit");
+            }
+            static void Input()
+            {
+                Console.WriteLine("Please Select Menu: ");
+                Menu menu = (Menu)(int.Parse(Console.ReadLine()));
+                MenuList(menu);
+            }
+            static void MenuList(Menu memu)
+            {
+                if (memu == Menu.PlayGame)
+                {
+                    Hangman.playGame();
+                }
+                else
+                {
+                   
+                }
+            }
+
+            static void PrintMenu()
+            {
+                Console.Clear();
+                PrintHeader();
+                PrintList();
+                Input();
+            }
+
+            static void Main(string[] args)
+            {
+                PrintMenu();
+
+            }
+        }
+    }
+}
+
